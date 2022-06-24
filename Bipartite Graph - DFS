@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool detectBipartite(unordered_map<int,int>&vis,int node,int node_color,unordered_map<int,vector<int>>mp,unordered_map<int,int>&color)
+{
+ 
+    color[node]=node_color;
+    vis[node]=1;
+    for(auto itr:mp[node])
+    {
+        if(vis[itr]==0)
+            detectBipartite(vis,itr,node_color^1,mp,color);
+        else 
+        {
+            if(color[itr]==node_color)
+            {
+                return true;
+            }
+        }
+            
+    }
+    return false;
+}
+bool isBipartite(vector<vector<int>>& e, int n, int m)
+{
+      unordered_map<int,vector<int>>mp;
+    unordered_map<int,int>color;
+        for(auto itr:e)
+        {
+            mp[itr[0]].push_back(itr[1]);
+             mp[itr[1]].push_back(itr[0]);
+        }
+     
+        unordered_map<int,int>vis;
+      for(int i=0;i<=n;i++)
+      {
+          if(vis[i]==0)
+          {
+             
+              if(detectBipartite(vis,i,1,mp,color)==true)
+              {
+                  return false;
+              }
+          }
+      }
+    return true;
+
+}
