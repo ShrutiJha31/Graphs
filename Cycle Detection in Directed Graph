@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool detectCycleSolve(unordered_map<int,int>&vis,int node,unordered_map<int,vector<int>>mp,unordered_map<int,int>&dfsvis)
+{
+ vis[node]=1;
+    dfsvis[node]=1;
+    for(auto itr:mp[node])
+    {
+        if(vis[itr]==0)
+        {
+             if(detectCycleSolve(vis,itr,mp,dfsvis)==true)
+                 return true;
+        }
+        else if(dfsvis[itr]!=0)
+            return true;
+    }
+    dfsvis[node]=0;
+    return false;
+}
+bool isCyclic(vector<vector<int>>& e, int n, int m)
+{
+   unordered_map<int,vector<int>>mp;
+        for(auto itr:e)
+        {
+            mp[itr[0]].push_back(itr[1]);
+        }
+     
+        unordered_map<int,int>vis,dfsvis;
+      for(int i=0;i<=n;i++)
+      {
+          if(vis[i]==0)
+          {
+             
+              if(detectCycleSolve(vis,i,mp,dfsvis)==true)
+                  return true;
+          }
+      }
+    return false;
+}
