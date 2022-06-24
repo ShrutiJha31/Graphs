@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool detectCycleSolve(unordered_map<int,int>&vis,int n,unordered_map<int,vector<int>>mp)
+{
+       queue<pair<int,int>>q;
+      q.push({n,-1});
+      
+        while(!q.empty())
+        {
+            int par=q.front().first;
+            int gpar=q.front().second;
+            vis[par]=1;
+            q.pop();
+            for(auto child:mp[par])
+            {
+                if(vis[child]==1&&child!=gpar)
+                {
+                   return true;
+                }
+                else if(vis[child]==0)
+                    q.push({child,par});
+            }
+         
+        }
+        return false;
+}
+string cycleDetection (vector<vector<int>>& e, int n, int m)
+{
+      unordered_map<int,vector<int>>mp;
+        for(auto itr:e)
+        {
+            mp[itr[0]].push_back(itr[1]);
+             mp[itr[1]].push_back(itr[0]);
+        }
+     
+        unordered_map<int,int>vis;
+      for(int i=0;i<=n;i++)
+      {
+          if(vis[i]==0)
+          {
+             
+              if(detectCycleSolve(vis,i,mp)==true)
+                  return "Yes";
+          }
+      }
+    return "No";
+}
