@@ -1,0 +1,46 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution
+{
+	public:
+	//Function to return list containing vertices in Topological order. 
+
+
+  vector<int>ans;
+  void dfs(vector<int> adj[],unordered_map<int,int>&in,int node,unordered_map<int,int>&vis)
+  {
+      ans.push_back(node);
+      
+      vis[node]=1;
+      for(auto itr:adj[node])
+      {
+ 
+          in[itr]--;
+          if(in[itr]==0)
+          dfs(adj,in,itr,vis);
+      }
+     
+  }
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    unordered_map<int,int>in,vis;
+	  
+	    for(int i=0;i<V;i++)
+	    {
+	        for(auto itr:adj[i])
+	        in[itr]++;
+	    }
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        if(in[i]==0&&vis[i]==0)
+	        {
+	        dfs(adj,in,i,vis);
+	        }
+	    }
+	    return ans;
+	}
+};
