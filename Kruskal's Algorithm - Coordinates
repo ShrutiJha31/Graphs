@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int par[1000000];
+    int rank[100000];
+    
+    int findPar(int node)
+    {
+        if(node == par[node])
+            return node;
+        return par[node] = findPar(par[node]);
+    }
+    
+    void union_set(int node1, int node2)
+    {
+    
+        node1 = findPar(node1);
+        node2=findPar(node2);
+        if(rank[node1]>rank[node2])
+        {
+            par[node2] = node1;
+        }
+        else if(rank[node2]>rank[node1])
+        {
+            par[node1]=node2;
+        }
+        else
+        {
+               par[node1]=node2;
+            rank[node2]++;
+        }
+    }
+    int minCostConnectPoints(vector<vector<int>>& p) {
+      vector<pair<int,int>>v;
+     priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>>q;
+            
+        for(int i=0;i<p.size();i++)
+        {
+            for(int j=i+1;j<p.size();j++)
+            {
+                int dis= abs(p[i][0]-p[j][0])+abs(p[i][1]-p[j][1]);
+                q.push({dis,{i,j}});
+            }
+        }
+        int sum=0;
+        
+        for(int i=0;i<p.size();i++)
+            par[i]=i;
+        memset(rank,0,sizeof(rank));
+        while(!q.empty())
+        {
+            int dis=q.top().first;
+            int f_point = q.top().second.first;
+            int s_point = q.top().second.second;
+            q.pop();
+            if(findPar(f_point)!=findPar(s_point))
+            {
+                sum+=dis;
+               union_set(f_point,s_point);
+              
+            }
+        }
+        
+        return sum;
+    }
+};
