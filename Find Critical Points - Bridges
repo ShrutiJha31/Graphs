@@ -1,0 +1,53 @@
+class Solution {
+public:
+    
+    vector<vector<int>>ans;
+    void dfs(vector<int>mp[],int node,int parent, vector<int>&vis,int timer,vector<int>&low,vector<int>&tin)
+    {
+        vis[node]=1;
+        low[node]=timer;
+        tin[node]=timer++;
+        
+        for(auto itr:mp[node])
+        {
+            if(itr==parent)
+                continue;
+            if(vis[itr]==0)
+            {
+                dfs(mp,itr,node,vis,timer,low,tin);
+                low[node]=min(low[node],low[itr]);
+                if(low[itr]>tin[node])
+                {
+                   
+                   
+                    ans.push_back({node,itr});
+                }
+            }
+            else
+                low[node]=min(low[node],low[itr]);  
+        }
+    }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& c) {
+       vector<int> mp[n]; 
+       vector<int> vis(n, 0); 
+        vector<int>low(n,-1);
+        vector<int>tin(n,-1);
+        int timer =0;
+        for(auto itr:c)
+        {
+            mp[itr[0]].push_back(itr[1]);
+            mp[itr[1]].push_back(itr[0]);
+            
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(vis[i]==0)
+            {
+                dfs(mp,i,-1,vis,timer,low,tin);
+            }
+        }
+        return ans;
+        
+    }
+};
