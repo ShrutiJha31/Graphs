@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool detectCycleSolve( vector<int>&vis,int node,vector<int>mp[],vector<int>&dfsvis)
+{
+ vis[node]=1;
+    dfsvis[node]=1;
+    for(auto itr:mp[node])
+    {
+        if(vis[itr]==0)
+        {
+             if(detectCycleSolve(vis,itr,mp,dfsvis)==true)
+                 return true;
+        }
+        else if(dfsvis[itr]!=0)
+            return true;
+    }
+    dfsvis[node]=0;
+    return false;
+}
+    vector<int> eventualSafeNodes(vector<vector<int>>& g) {
+        vector<int>mp[g.size()];
+        for(int i=0;i<g.size();i++)
+            mp[i]=g[i];
+        vector<int>v;
+           vector<int>vis(g.size(),0);
+        vector<int>dfsvis(g.size(),0);
+      for(int i=0;i<g.size();i++)
+      {
+          
+             
+              if(detectCycleSolve(vis,i,mp,dfsvis)==false)
+                 v.push_back(i);
+          
+      }
+        return v;
+    }
+};
