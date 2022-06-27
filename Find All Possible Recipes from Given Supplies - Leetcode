@@ -1,0 +1,51 @@
+class Solution {
+public:
+    void dfs(string node,unordered_map<string,vector<string>>&g, unordered_map<string,int>&in)
+    {
+        
+       cout<<node<<endl;
+        for(auto itr:g[node])
+        {
+           
+            if(in[itr]>0)
+            {
+              
+            in[itr]--;
+                if(in[itr]==0)
+                    dfs(itr,g,in);
+            }
+        }
+    }
+    vector<string> findAllRecipes(vector<string>& r, vector<vector<string>>& ing, vector<string>& s) {
+        int cnt=1;
+        unordered_map<string,int>in;
+        
+        unordered_map<string,vector<string>>g;
+        
+        for(int i=0;i<r.size();i++)
+        {
+            for(auto itr1:ing[i])
+            {
+                g[itr1].push_back(r[i]);
+                in[r[i]]++;
+            }
+        }
+        for(auto itr:s)
+        {
+            in[itr]=0;
+            dfs(itr,g,in);
+        }
+      vector<string>ans;
+        for(int i=0;i<r.size();i++)
+        {
+            
+           if(in[r[i]]==0&&find(ans.begin(),ans.end(),r[i])==ans.end())
+           {
+               ans.push_back(r[i]);
+           // dfs(r[i],g,in);
+           }
+        
+        }
+        return ans;
+    }
+};
