@@ -1,0 +1,72 @@
+class Solution {
+public:
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& r, vector<vector<int>>& b) {
+        
+        unordered_map<int,vector<pair<int,int>>>mp;
+        for(auto itr:r)
+        {
+            mp[itr[0]].push_back({0,itr[1]});
+           
+        }
+          for(auto itr:b)
+        {
+            mp[itr[0]].push_back({1,itr[1]});
+            
+        }
+        
+        vector<int>dis(n,1e8);
+        dis[0]=0;
+        queue<pair<int,pair<int,int>>>q,q1;
+        unordered_map<int,int>bvis,rvis;
+        
+        for(auto itr:mp[0])
+        {
+            q.push({0,itr});
+           
+        }
+        int cnt=1;
+        while(!q.empty())
+        {
+            int par=q.front().first;
+            int c=q.front().second.first;
+            int e = q.front().second.second;
+            if(c==0)
+                rvis[e]=1;
+            else
+                bvis[e]=1;
+            dis[e]=min(dis[e],cnt);
+            q.pop();
+            for(auto itr:mp[e])
+            {
+                if(itr.first!=c)
+                {
+                if(itr.first==0&&rvis[itr.second]==0)
+                {
+                    q1.push({e,itr});
+                }
+                    else if(itr.first==1&&bvis[itr.second]==0)
+                    {
+                         q1.push({e,itr});
+                    }
+                }
+            }
+            if(q.empty()&&!q1.empty())
+            {
+                cnt++;
+                while(!q1.empty())
+                {
+                    q.push(q1.front());
+                    q1.pop();
+                }
+            }
+            
+            
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(dis[i]==1e8)
+                dis[i]=-1;
+        }
+        return dis;
+    }
+};
