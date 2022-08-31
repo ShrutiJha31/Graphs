@@ -1,0 +1,50 @@
+class Solution {
+public:
+    
+          unordered_map<int,vector<int>>mp;
+    unordered_map<int,int>vis,in,low;
+      
+          int timer=0; 
+    vector<vector<int>>ans;
+    void dfs(int node,int par)
+    {
+        vis[node]=1;
+        in[node]=timer,low[node]=timer;
+        timer++;
+        for(auto child:mp[node])
+        {
+            if(child==par)
+                continue;
+            if(vis[child]==1)
+            {
+                low[node]=min(in[child],low[node]);
+                
+                
+            }
+            else
+            {
+                dfs(child,node);
+                if(low[child]>in[node])
+                {
+                    vector<int>v;
+                    v.push_back(child);
+                    v.push_back(node);
+                    ans.push_back(v);
+                }
+                low[node]=min(low[child],low[node]);
+            }
+        }
+    }
+    
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& c) {
+   
+        for(auto itr:c)
+        {
+            mp[itr[0]].push_back(itr[1]);
+            mp[itr[1]].push_back(itr[0]);
+        }
+        dfs(0,0);
+        return ans;
+        
+    }
+};
